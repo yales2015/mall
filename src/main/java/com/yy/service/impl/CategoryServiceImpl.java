@@ -53,7 +53,7 @@ public class CategoryServiceImpl implements ICategoryService {
         Category category=new Category();
         category.setName(categoryName);
         category.setId(categoryId);
-        int rowCount = categoryMapper.updateNameByPrimaryKey(category);
+        int rowCount = categoryMapper.updateByPrimaryKeySelective(category);
         if(rowCount<=0){
             return ServerResponse.createByErrorMsg("更新品类名称失败");
         }

@@ -1,7 +1,6 @@
 package com.yy.service.impl;
 
 import com.yy.common.Const;
-import com.yy.common.ResponseCode;
 import com.yy.common.ServerResponse;
 import com.yy.common.TokenCache;
 import com.yy.dao.UserMapper;
@@ -21,7 +20,7 @@ import java.util.UUID;
 public class UserServiceImpl implements IUserService {
 
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
     @Override
     public ServerResponse<User> login(String username, String password) {
@@ -30,8 +29,9 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMsg("用户名不存在");
         }
         //密码登录MD5
-        String md5Password=MD5Util.MD5EncodeUtf8(password);
 
+        String md5Password=MD5Util.MD5EncodeUtf8(password);
+        userMapper.deleteByPrimaryKey(24);
         User user=userMapper.selectLogin(username,md5Password);
         if(user==null){
             return ServerResponse.createByErrorMsg("密码错误");
@@ -140,7 +140,7 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMsg("旧密码错误");
         }
         user.setPassword(MD5Util.MD5EncodeUtf8(passwordNew));
-        int updataCount=userMapper.updatePasswordById(user.getId(),user.getPassword());
+        int updataCount=userMapper.updateByPrimaryKeySelective(user);
         if(updataCount==0){
             return ServerResponse.createByErrorMsg("密码更新失败");
         }
@@ -163,7 +163,7 @@ public class UserServiceImpl implements IUserService {
         updateUser.setQuestion(user.getQuestion());
         updateUser.setAnswer(user.getAnswer());
 
-        int updateCount=userMapper.updateByPrimaryKey(updateUser);
+        int updateCount=userMapper.updateByPrimaryKeySelective(updateUser);
         if(updateCount==0){
             return ServerResponse.createByErrorMsg("更新个人信息失败");
         }

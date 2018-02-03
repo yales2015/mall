@@ -22,15 +22,15 @@ import java.util.List;
  * Created by yy on 2018/1/17.
  */
 @Controller
-@RequestMapping("/manager")
-public class CategoryController {
+@RequestMapping("/manager/category")
+public class CategoryManageController {
     @Autowired
     IUserService iUserService;
 
     @Autowired
     ICategoryService iCategoryService;
 
-    @RequestMapping(value="/add_category",method = RequestMethod.POST)
+    @RequestMapping(value="/add",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> addCategory(HttpSession session,String categoryName,@RequestParam(value="parentId",defaultValue = "0")int parentId){
         User currentUser=(User) session.getAttribute(Const.CURRENT_USER);
@@ -44,7 +44,7 @@ public class CategoryController {
         return iCategoryService.addCategory(categoryName,parentId);
     }
 
-    @RequestMapping(value="/set_category_name",method = RequestMethod.POST)
+    @RequestMapping(value="/set_name",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> setCategoryName(HttpSession session,int categoryId,String categoryName){
         User currentUser=(User) session.getAttribute(Const.CURRENT_USER);
@@ -58,7 +58,7 @@ public class CategoryController {
         return iCategoryService.setCategoryName(categoryId,categoryName);
     }
 
-    @RequestMapping(value = "/get_child_parallel_category",method = RequestMethod.POST)
+    @RequestMapping(value = "/get_children_parallel",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<List<Category>> getChildrenParallelCategory(HttpSession session, @RequestParam(value = "categoryId",defaultValue="0") int categoryId){
         User currentUser=(User) session.getAttribute(Const.CURRENT_USER);
@@ -78,7 +78,7 @@ public class CategoryController {
      * @param categoryId
      * @return
      */
-    @RequestMapping(value = "/get_deep_category",method = RequestMethod.POST)
+    @RequestMapping(value = "/get_deep_children",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<List<Integer>> getCategoryAndDeepChildrenCategory(HttpSession session,@RequestParam(value = "categoryId",defaultValue="0") int categoryId) {
         User currentUser=(User) session.getAttribute(Const.CURRENT_USER);
